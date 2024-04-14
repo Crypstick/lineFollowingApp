@@ -1,20 +1,41 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Header } from 'react-native/Libraries/NewAppScreen';
 
-export default function App() {
+import HomeScreen from './src/pages/HomeScreen';
+import FirstRun from './src/pages/FirstRun';
+import SubsequentRun from './src/pages/SubsequentRun';
+
+
+
+const Stack = createNativeStackNavigator();
+
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="FirstRun"
+          component={FirstRun}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SubsequentRun"
+          component={SubsequentRun}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
