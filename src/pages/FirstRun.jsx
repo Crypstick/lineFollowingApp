@@ -33,7 +33,7 @@ const FirstRun = () => {
     setValues(arr);
   };
 
-  setCardToCard = (index) => {
+  const setCardToCard = (index) => {
     let arr = [];
     for (let i = 0; i < values.length; i++) {
       if (index == i) {
@@ -41,6 +41,25 @@ const FirstRun = () => {
       }
       arr.push(values[i]);
     }
+    setValues(arr);
+  };
+
+  const changeValue = (item_n, new_value, find_index) => {
+    console.log(`n:${item_n} val:${new_value} find:${find_index}`);
+    arr = [];
+    values.forEach((value) => {
+      if (value.index == find_index) {
+        switch (item_n) {
+          case 1:
+            value.item1 = new_value;
+            break;
+          case 2:
+            value.item2 = new_value;
+            break;
+        }
+      }
+      arr.push(value);
+    });
     setValues(arr);
   };
 
@@ -64,10 +83,11 @@ const FirstRun = () => {
         <TextInput
           value={item.item1.name != undefined ? item.item1.name : item.item1}
           onChangeText={(text) => {
+            console.log(text);
             console.log(item.item1.name != undefined);
             item.item1.name != undefined
               ? item.item1.set(text)
-              : (item.item1 = text);
+              : changeValue(1, text, item.index);
           }}
           onSubmitEditing={() => setCardToCard(item.index)}
           className="border-solid border-red-400 border-2 rounded-md px-2 py-1"
@@ -77,7 +97,7 @@ const FirstRun = () => {
           onChangeText={(text) =>
             item.item2.name != undefined
               ? item.item2.set(text)
-              : (item.item2 = text)
+              : changeValue(2, text, item.index)
           }
           onSubmitEditing={() => setCardToCard(item.index)}
           className="border-solid border-red-400 border-2 rounded-md px-2 py-1"
