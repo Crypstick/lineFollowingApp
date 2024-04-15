@@ -11,6 +11,7 @@ import { StatusBar } from "expo-status-bar";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import NewSegment from "../components/NewSegment";
+import { AntDesign } from "@expo/vector-icons";
 
 const FirstRun = () => {
   const [test, setTest] = useState(0);
@@ -81,8 +82,8 @@ const FirstRun = () => {
       <>
         <Text>Textbox {item.index == undefined ? 1 : item.index + 1}</Text>
         <TextInput
-          value={item.item1.name != undefined ? item.item1.name : item.item1}
-          onChangeText={(text) => {
+          value={(text) => text}
+          onEndEditing={(text) => {
             console.log(text);
             console.log(item.item1.name != undefined);
             item.item1.name != undefined
@@ -90,7 +91,7 @@ const FirstRun = () => {
               : changeValue(1, text, item.index);
           }}
           onSubmitEditing={() => setCardToCard(item.index)}
-          className="border-solid border-red-400 border-2 rounded-md px-2 py-1"
+          className="border-solid border-red-400 border-2 rounded-md px-2 py-1 m"
         />
         <TextInput
           value={item.item2.name != undefined ? item.item2.name : item.item2}
@@ -102,6 +103,9 @@ const FirstRun = () => {
           onSubmitEditing={() => setCardToCard(item.index)}
           className="border-solid border-red-400 border-2 rounded-md px-2 py-1"
         />
+        <Pressable className="">
+          <Text> Finish Editing </Text>
+        </Pressable>
       </>
     );
   };
