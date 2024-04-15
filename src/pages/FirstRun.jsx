@@ -12,138 +12,69 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 import NewSegment from "../components/NewSegment";
 import { AntDesign } from "@expo/vector-icons";
+import Edit from "../components/edit";
 
 const FirstRun = () => {
-  const [test, setTest] = useState(0);
-  const [var2, setVar2] = useState(0);
-  const [values, setValues] = useState([]);
+  const [var1, setVar1] = useState()
+  const [var2, setVar2] = useState()
+  const [values, setValues] = useState([])
 
-  const runEntry = [
-    { name: test, set: setTest },
-    { name: var2, set: setVar2 },
-  ];
+  const addValue = () => {
+    let obj = {var1: var1, var2: var2, index: values.length, type: "card"}
+    setValues([...values, obj])
+  }
 
-  const setCardToField = (index) => {
-    let arr = [];
-    for (let i = 0; i < values.length; i++) {
-      if (index == i) {
-        values[i].type = "fields";
+  const changeState = (index) => {
+    let arr = []
+    values.forEach(value => {
+      if (value.index == index) {
+        value.type == "card" ? value.type = "edit" : value.type = "card"
       }
-      arr.push(values[i]);
-    }
-    setValues(arr);
-  };
-
-  const setCardToCard = (index) => {
-    let arr = [];
-    for (let i = 0; i < values.length; i++) {
-      if (index == i) {
-        values[i].type = "card";
-      }
-      arr.push(values[i]);
-    }
-    setValues(arr);
-  };
-
-  const changeValue = (item_n, new_value, find_index) => {
-    console.log(`n:${item_n} val:${new_value} find:${find_index}`);
-    arr = [];
-    values.forEach((value) => {
-      if (value.index == find_index) {
-        switch (item_n) {
-          case 1:
-            value.item1 = new_value;
-            break;
-          case 2:
-            value.item2 = new_value;
-            break;
-        }
-      }
-      arr.push(value);
-    });
-    setValues(arr);
-  };
-
-  const Card = ({ item }) => {
-    return (
-      <Pressable
-        className="p-4 rounded-lg shadow-lg"
-        onPress={() => setCardToField(item.index)}
-      >
-        <Text>{item.item1}</Text>
-        <Text>{item.item2}</Text>
-        <Text>{item.index}</Text>
-      </Pressable>
-    );
-  };
-
-  const Fields = ({ item }) => {
-    return (
-      <>
-        <Text>Textbox {item.index == undefined ? 1 : item.index + 1}</Text>
-        <TextInput
-          value={(text) => text}
-          onEndEditing={(text) => {
-            console.log(text);
-            console.log(item.item1.name != undefined);
-            item.item1.name != undefined
-              ? item.item1.set(text)
-              : changeValue(1, text, item.index);
-          }}
-          onSubmitEditing={() => setCardToCard(item.index)}
-          className="border-solid border-red-400 border-2 rounded-md px-2 py-1 m"
-        />
-        <TextInput
-          value={item.item2.name != undefined ? item.item2.name : item.item2}
-          onChangeText={(text) =>
-            item.item2.name != undefined
-              ? item.item2.set(text)
-              : changeValue(2, text, item.index)
-          }
-          onSubmitEditing={() => setCardToCard(item.index)}
-          className="border-solid border-red-400 border-2 rounded-md px-2 py-1"
-        />
-        <Pressable className="">
-          <Text> Finish Editing </Text>
-        </Pressable>
-      </>
-    );
-  };
+      arr.push(value)
+    })
+    setValues(arr)
+  }
 
   return (
-    <View className="p-8">
-      <Text>First Run</Text>
-      {values.map((item) => {
-        if (item.type == "card") {
-          return <Card item={item} />;
+    <View className="p-8 pt-16 bg-neutral-100 h-full">
+      <Text className="font-semibold text-3xl mb-4">First Run</Text>
+      {values.map((value) => {
+        if (value.type == "card") {
+          return(
+            <View key={value.index} className="mb-4 p-4 rounded-lg text-lg bg-white">
+              <Text className="font-semibold text-xl">Value {value.index + 1}</Text>
+              <Text>{value.var1}</Text>
+              <Text>{value.var2}</Text>
+              <Pressable
+                onPress={() => {changeState(value.index)}}
+              >
+                <Text className="text-md font-semibold mt-2 hover:text-blue-400">Edit</Text>
+              </Pressable>
+            </View>
+          )
         } else {
-          return <Fields item={item} />;
+          return (
+            <Edit value={value} changeState={changeState} values={values}setValues={setValues} key={value.index}/>
+          )
         }
       })}
-      <Fields
-        item={{
-          item1: { name: test, set: setTest },
-          item2: { name: var2, set: setVar2 },
-        }}
+      <TextInput
+        value={var1}
+        onChangeText={setVar1} 
+        className="py-2 px-4 rounded-full border-2 border-blue-400 mb-4 bg-white"
       />
-      <View className="items-center mt-12">
-        <Pressable
-          className="bg-blue-600 p-2 items-center rounded-full w-[12vw]"
-          onPress={() => {
-            let index = values.length;
-            setValues([
-              ...values,
-              { item1: test, item2: var2, type: "card", index: index },
-            ]);
-            console.log([
-              ...values,
-              { item1: test, item2: var2, type: "card", index: index },
-            ]);
-          }}
-        >
-          <Text className="text-white text-3xl">+</Text>
-        </Pressable>
-      </View>
+      <TextInput
+        value={var2}
+        onChangeText={setVar2} 
+        className="py-2 px-4 rounded-full border-2 border-blue-400 bg-white"
+      />
+      <Pressable
+        onPress={addValue}
+      >
+        <Text className="bg-blue-400 text-white text-center py-2 mt-12 text-lg rounded-full">
+          Submit
+        </Text>
+      </Pressable>
     </View>
   );
 };
